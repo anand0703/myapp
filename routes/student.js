@@ -28,6 +28,7 @@ router.get('/getLogin', function (req, res, next) {
       console.log(result);
       res.render('login', { "data": result })
     });
+    
     router.post('/updateLogin', function (req, res, next) {
         console.log(req.body)
         res.json({ "Name": "Hello" })

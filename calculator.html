@@ -1,0 +1,56 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web form</title>
+</head>
+<body>
+
+  <label>Enter the first number </label>
+  <input type="text" id="num1"><br>
+  <label>Enter the second number </label>
+  <input type="text" id="num2"><br>
+  <input type="button" value="addition" onclick="add()">
+  <input type="button" value="subtraction" onclick="sub()">
+  <input type="button" value="multiplication" onclick="multi()">
+  <input type="button" value="division" onclick="division()">
+  <div  id="result"></div>
+  <script>
+    function add(){
+      var num1 = parseInt(document.getElementById("num1").value);
+      var num2 = parseInt(document.getElementById("num2").value);
+      var sum=num1+num2;
+      document.getElementById("result").innerHTML=sum;
+
+    }
+
+    function sub(){
+      var num1 = parseInt(document.getElementById("num1").value);
+      var num2 = parseInt(document.getElementById("num2").value);
+      var sub=num1-num2;
+      document.getElementById("result").innerHTML=sub;
+
+    }
+
+    function multi(){
+      var num1 = parseInt(document.getElementById("num1").value);
+      var num2 = parseInt(document.getElementById("num2").value);
+      var multi=num1*num2;
+      document.getElementById("result").innerHTML=multi;
+    }
+
+    function division(){
+      var num1 = parseInt(document.getElementById("num1").value);
+      var num2 = parseInt(document.getElementById("num2").value);
+      var division=num1/num2;
+      document.getElementById("result").innerHTML=division;
+
+    }
+
+
+
+  </script>
+</body>
+</html>

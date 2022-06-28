@@ -20,6 +20,7 @@ router.get('/:da-:ta', function (req, res, next) {
     // res.json({ name: "aniket anand" })
     res.render('student', { name: req.params.da, name1:req.params.ta});
 });
+
 router.get('/getLogin', function (req, res, next) {
     console.log(req.query)
     con.connect()
@@ -33,6 +34,7 @@ router.get('/getLogin', function (req, res, next) {
         console.log(req.body)
         res.json({ "Name": "Hello" })
       });
+    });
 
 
 router.get('/:da', function (req, res, next) {

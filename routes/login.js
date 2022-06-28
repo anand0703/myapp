@@ -33,5 +33,3 @@ res.json({"Name":req.body})
 });
 
 module.exports = router;
-© 2022 GitHub, Inc.
-Terms

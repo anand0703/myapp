@@ -1,8 +1,180 @@
 {{!-- <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p> --}}
 
-<form action="/signup" method="post">
+{{!-- <form action="/signup" method="post">
     <input type="text" name="nameInput" id="" placeholder="Enter your name"><br><br>
     <input type="tel" name="phone" id="" placeholder="Enter your contact"><br><br>
     <button type="submit">Submit</button>
-</form>
+</form> --}}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KCC Calculator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="calc">
+            <div class="calc_title"><span>Aniket CALCULATOR</span></div>
+            <form>
+                <div class="calc_body">
+                    <label for="num1">Number 1 : </label> <input type="number" class="num1" id="num1"
+                        name="num1"><br><br>
+                    <label for="num2">Number 2 : </label> <input type="number" class="num2" id="num2"
+                        name="num2"><br><br>
+                    <button class="add" id="add">ADD</button>
+                    <button class="sub" id="sub">SUBTRACT</button>
+                    <button class="mul" id="mul">MULTIPLY</button><br><br>
+
+                    <div class="answer" id="ans">Result : </div>
+
+                </div>
+            </form>
+
+            <div class="history">
+                <table class="hist_tb">
+                    <caption>HISTORY</caption>
+                    <thead>
+                        <tr>
+                            <th>Num 1</th>
+                            <th>Num 2</th>
+                            <th>Operation</th>
+                            <th>Result</th>
+                            <th>
+                                <select class="oper">
+                                    <option value="+">+</option>
+                                    <option value="-">-</option>
+                                    <option value="*">*</option>
+                                </select>
+                            </th>
+                            <th>Submit</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {{#data}}
+                        <tr>
+                            <td>{{num1}}</td>
+                            <td>{{num2}}</td>
+                            <td>{{op}}</td>
+                            <td>{{res}}</td>
+                            <td></td>
+                            <td>
+                                <button class="submitBtn" id="{{id}}">Submit</button>
+                            </td>
+                        </tr>
+                        {{/data}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(() => {
+            $("#add").click(function (event) {
+                event.preventDefault();
+                var x = $(".num1").val();
+                var y = $(".num2").val();
+                $.post({ url: "/add", data: { a: x, b: y } }).then((data) => {
+                    console.log(data);
+                    if (x == "" || y == "") {
+                        alert("Enter num1 and num2");
+                    }
+                    else {
+                        $('#ans').empty().append('Result : ' + data);
+                        var hist_data = "<tr><td>" + x + "</td><td>" + y + "</td><td>" + "+" + "</td><td>" + data + "</td><td>" + "</td><td>" + "<button class='submitBtn'>Submit</button> </td></tr>";
+                        $(".hist_tb tbody").append(hist_data);
+                    }
+                });
+            });
+        });
+        $(document).ready(() => {
+            $("#sub").click(function (event) {
+                event.preventDefault();
+                var x = $(".num1").val();
+                var y = $(".num2").val();
+                $.post({ url: "/sub", data: { a: x, b: y } }).then((data) => {
+                    console.log(data);
+                    if (x == "" || y == "") {
+                        alert("Enter num1 and num2");
+                    }
+                    else {
+                        $('#ans').empty().append('Result : ' + data);
+                        var hist_data = "<tr><td>" + x + "</td><td>" + y + "</td><td>" + "-" + "</td><td>" + data + "</td><td>" + "</td><td>" + "<button class='submitBtn'>Submit</button> </td></tr>";
+                        $(".hist_tb tbody").append(hist_data);
+                    }
+                });
+            });
+        });
+        $(document).ready(() => {
+            $("#mul").click(function (event) {
+                event.preventDefault();
+                var x = $(".num1").val();
+                var y = $(".num2").val();
+                $.post({ url: "/mul", data: { a: x, b: y } }).then((data) => {
+                    console.log(data);
+                    if (x == "" || y == "") {
+                        alert("Enter num1 and num2");
+                    }
+                    else {
+                        $('#ans').empty().append('Result : ' + data);
+                        var hist_data = "<tr><td>" + x + "</td><td>" + y + "</td><td>" + "*" + "</td><td>" + data + "</td><td>" + "</td><td>" + "<button class='submitBtn'>Submit</button> </td></tr>";
+                        $(".hist_tb tbody").append(hist_data);
+                    }
+                });
+            });
+        });
+        $('.submitBtn').click(function (event) {
+            $.post('/updateData', $("aniket_data." + event.target.id).serializeArray()).then((data) => {
+                var id = event.target.id;
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    if (data[i].id == id) {
+                        var n1 = data[i].num1;
+                        var n2 = data[i].num2;
+                        var oper = $(".oper").val();
+                        console.log(oper);
+                        if (oper === '+') {
+                            console.log(n1 + n2);
+                            var res = n1 + n2;
+                            $.post({ url: "/insertUpdate", data: { a: n1, b: n2, op: oper, rest: res } }).then((data) => { });
+                            $('#ans').empty().append('Result : ' + res);
+                            var hist_data = "<tr><td>" + n1 + "</td><td>" + n2 + "</td><td>" + "+" + "</td><td>" + res + "</td><td>" + "</td><td>" + "<button class='submitBtn'>Submit</button> </td></tr>";
+                            $(".hist_tb tbody").append(hist_data);
+                        }
+                        if (oper === '-') {
+                            console.log(n1 - n2);
+                            var res = n1 - n2;
+                            $.post({ url: "/insertUpdate", data: { a: n1, b: n2, op: oper, rest: res } }).then((data) => { });
+                            $('#ans').empty().append('Result : ' + res);
+                            var hist_data = "<tr><td>" + n1 + "</td><td>" + n2 + "</td><td>" + "-" + "</td><td>" + res + "</td><td>" + "</td><td>" + "<button class='submitBtn'>Submit</button> </td></tr>";
+                            $(".hist_tb tbody").append(hist_data);
+                        }
+                        if (oper === '*') {
+                            console.log(n1 * n2);
+                            var res = n1 * n2;
+                            $.post({ url: "/insertUpdate", data: { a: n1, b: n2, op: oper, rest: res } }).then((data) => { });
+                            $('#ans').empty().append('Result : ' + res);
+                            var hist_data = "<tr><td>" + n1 + "</td><td>" + n2 + "</td><td>" + "*" + "</td><td>" + res + "</td><td>" + "</td><td>" + "<button class='submitBtn'>Submit</button> </td></tr>";
+                            $(".hist_tb tbody").append(hist_data);
+                        }
+                    }
+                }
+            })
+            console.log(event.target.id)
+        });
+    </script>
+
+</body>
+
+</html>
